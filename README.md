@@ -48,11 +48,13 @@ Example of output file with the correct solution output data (for this input fil
 10,2
 1
 
-How to Check Your Solution
+How to Run:
 
     Create a file input.txt with the contents described in the section Input/Output data format .
-    Put the input.txt into a folder with your_solution.jar file (the name of the jar file doesn't matter).
-   
+    Put the input.txt into a folder with stock_exchange.jar file.
+
+run command:  java -Xmx128M -jar stock_exchange.jar
+
     Assuming your solution works correctly, output.txt file should appear in the same folder, with the contents identical to what is shown in the Input/Output data format section. 
 
 

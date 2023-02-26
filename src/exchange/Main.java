@@ -1,9 +1,6 @@
 package exchange;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -41,16 +38,42 @@ public class Main {
     }
 
 
+    private static void writeToFile(String outputString) {
+        final String OUT_FILE_NAME = "output.txt";
+        File outputFile = new File(OUT_FILE_NAME);
+        if (!outputFile.exists()) {
+            try {
+                outputFile.createNewFile();
+            } catch (IOException e) {
+                System.out.println("error creating file " + OUT_FILE_NAME);
+                System.out.println(e.getMessage());
+            }
+        }
+
+        try (FileWriter fw = new FileWriter(outputFile, true)) {
+            fw.write(outputString+"\n");
+        } catch (IOException e) {
+            System.out.println("error writing to file " + OUT_FILE_NAME);
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+
     public static void main(String[] args) throws IOException {
         final String IN_FILE_NAME = "input.txt";
-        final String OUT_FILE_NAME = "output.txt";
         final String DELIMITER = ",";
+        String outputString;
 
         File inputFile = new File(IN_FILE_NAME);
         if (!inputFile.exists()) {
-            System.out.println("file not found");
+            System.out.println("file " + IN_FILE_NAME + " not found in working directory!");
+            System.out.println("getName(): " + inputFile.getName());
+            System.out.println("getAbsolutePath(): " + inputFile.getAbsolutePath());
+            System.out.println("getParent(): " + inputFile.getParent());
             return;
         }
+
 
         final PriorityQueue<Bid> bids = new PriorityQueue<>();
         final PriorityQueue<Ask> asks = new PriorityQueue<>();
@@ -62,6 +85,8 @@ public class Main {
                 String selector = str[0];
 
                 switch (selector) {
+
+
                     case "u", "U":
                         int price = Integer.parseInt(str[1]);
                         int updateSize = Integer.parseInt(str[2]);
@@ -89,10 +114,14 @@ public class Main {
                             String task = str[1];
                             switch (task) {
                                 case "best_bid":
-                                    System.out.println("best bid: " + bids.peek());
+//                                    System.out.println("best bid: " + bids.peek());
+                                    outputString = bids.peek().getPrice() + "," + bids.peek().getSize();
+                                    writeToFile(outputString);
                                     break;
                                 case "best_ask":
-                                    System.out.println("best ask: " + asks.peek());
+//                                    System.out.println("best ask: " + asks.peek());
+                                    outputString = asks.peek().getPrice() + "," + asks.peek().getSize();
+                                    writeToFile(outputString);
                                     break;
 
                                 default:
@@ -106,7 +135,9 @@ public class Main {
                                 size = returnSize(specifiedPrice, asks);
                             }
 
-                            System.out.println("shares at price "+specifiedPrice+ ": " + size);
+//                            System.out.println("shares at price "+specifiedPrice+ ": " + size);
+                            outputString = String.valueOf(size);
+                            writeToFile(outputString);
                         }
 
                         break;
